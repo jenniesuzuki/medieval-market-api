@@ -1,17 +1,20 @@
 package br.com.fiap.medieval_market_api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.fiap.medieval_market_api.model.ClassePersonagem;
 import br.com.fiap.medieval_market_api.model.Personagem;
 import br.com.fiap.medieval_market_api.repository.PersonagemRepository;
+import br.com.fiap.medieval_market_api.specification.PersonagemSpecification;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +32,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/personagens")
 @Slf4j
 public class PersonagemController {
+
+    public record PersonagemFilter(String nome, ClassePersonagem classe) {
+    }
     
     @Autowired
     private PersonagemRepository repository;
@@ -36,9 +42,9 @@ public class PersonagemController {
     @GetMapping
     @Cacheable("personagens")
     // @Operation(description = "Listar todos os personagens", tags = "personagens", summary = "Lista de personagens")
-    public List<Personagem> getPersonagens() {
-        log.info("Buscando todos os personagens");
-        return repository.findAll();
+    public Page<Personagem> getPersonagens(PersonagemFilter filter, @PageableDefault(size = 10, sort = "nome") Pageable pageable) {
+        var specification = PersonagemSpecification.withFilters(filter);
+        return repository.findAll(specification, pageable);
     }
     
     @PostMapping

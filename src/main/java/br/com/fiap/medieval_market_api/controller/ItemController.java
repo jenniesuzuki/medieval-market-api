@@ -1,17 +1,23 @@
 package br.com.fiap.medieval_market_api.controller;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.medieval_market_api.model.Item;
+import br.com.fiap.medieval_market_api.model.RaridadeItem;
+import br.com.fiap.medieval_market_api.model.TipoItem;
 import br.com.fiap.medieval_market_api.repository.ItemRepository;
+import br.com.fiap.medieval_market_api.specification.ItemSpecification;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,15 +35,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Slf4j
 public class ItemController {
 
+    public record ItemFilter(String nomeItem, TipoItem tipo, BigDecimal precoMin, BigDecimal precomax, RaridadeItem raridade) {
+    }
+
     @Autowired
     private ItemRepository repository;
     
     @GetMapping
     @Cacheable("itens")
-    // @Operation(description = "Listar todos os personagens", tags = "personagens", summary = "Lista de personagens")
-    public List<Item> getItens() {
-        log.info("Buscando todos os itens");
-        return repository.findAll();
+    // @Operation(description = "Listar todos os itens", tags = "itens", summary = "Lista de itens")
+    public Page<Item> getItens(ItemFilter filter, @PageableDefault(size = 10, sort = "nomeItem") Pageable pageable) {
+        var specification = ItemSpecification.withFilters(filter);
+        //log.info("Buscando todos os itens");
+        return repository.findAll(specification, pageable);
     }
     
     @PostMapping
