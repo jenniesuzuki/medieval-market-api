@@ -42,7 +42,7 @@ public class PersonagemController {
     @GetMapping
     @Cacheable("personagens")
     // @Operation(description = "Listar todos os personagens", tags = "personagens", summary = "Lista de personagens")
-    public Page<Personagem> getPersonagens(PersonagemFilter filter, @PageableDefault(size = 10, sort = "nome") Pageable pageable) {
+    public Page<Personagem> getPersonagens(PersonagemFilter filter, @PageableDefault(size = 5, sort = "nome")  Pageable pageable) {
         var specification = PersonagemSpecification.withFilters(filter);
         return repository.findAll(specification, pageable);
     }

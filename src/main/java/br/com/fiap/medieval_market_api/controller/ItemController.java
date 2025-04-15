@@ -44,7 +44,7 @@ public class ItemController {
     @GetMapping
     @Cacheable("itens")
     // @Operation(description = "Listar todos os itens", tags = "itens", summary = "Lista de itens")
-    public Page<Item> getItens(ItemFilter filter, @PageableDefault(size = 10, sort = "nomeItem") Pageable pageable) {
+    public Page<Item> getItens(ItemFilter filter, @PageableDefault(size = 5, sort = "nomeItem") Pageable pageable) {
         var specification = ItemSpecification.withFilters(filter);
         //log.info("Buscando todos os itens");
         return repository.findAll(specification, pageable);
