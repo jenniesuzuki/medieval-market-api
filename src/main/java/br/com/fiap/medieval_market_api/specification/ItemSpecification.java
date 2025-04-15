@@ -23,7 +23,7 @@ public class ItemSpecification {
 
             if (filter.tipo() != null) {
                 predicates.add(
-                    cb.equal(root.get("tipoItem"), filter.tipo())
+                    cb.equal(root.get("tipo"), filter.tipo())
                 );
             }
 
@@ -33,21 +33,21 @@ public class ItemSpecification {
                 );
             }
 
-            if (filter.precoMin() != null && filter.precomax() != null) {
+            if (filter.precoMin() != null && filter.precoMax() != null) {
                 predicates.add(
-                    cb.between(root.get("preco"), filter.precoMin(), filter.precomax())
+                    cb.between(root.get("preco"), filter.precoMin(), filter.precoMax())
                 );
             }
 
-            if (filter.precoMin() != null && filter.precomax() == null) {
+            if (filter.precoMin() != null && filter.precoMax() == null) {
                 predicates.add(
                     cb.equal(root.get("preco"), filter.precoMin())
                 );
             }
 
-            if (filter.precoMin() == null && filter.precomax() != null) {
+            if (filter.precoMin() == null && filter.precoMax() != null) {
                 predicates.add(
-                    cb.equal(root.get("preco"), filter.precomax())
+                    cb.equal(root.get("preco"), filter.precoMax())
                 );
             }
 

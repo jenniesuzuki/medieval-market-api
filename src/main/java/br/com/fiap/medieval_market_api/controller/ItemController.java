@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Slf4j
 public class ItemController {
 
-    public record ItemFilter(String nomeItem, TipoItem tipo, BigDecimal precoMin, BigDecimal precomax, RaridadeItem raridade) {
+    public record ItemFilter(String nomeItem, TipoItem tipo, BigDecimal precoMin, BigDecimal precoMax, RaridadeItem raridade) {
     }
 
     @Autowired
