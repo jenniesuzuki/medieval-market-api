@@ -8,8 +8,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +35,11 @@ public class Personagem {
     @Enumerated(EnumType.STRING)
     private ClassePersonagem classe;
 
-    
+    @NotNull(message = "campo obrigatório")
+    @Min(1)
+    @Max(99)
     private Integer nivel;
+
+    @PositiveOrZero(message = "deve ser maior ou igual a zero")
     private BigDecimal moedas;
 }
